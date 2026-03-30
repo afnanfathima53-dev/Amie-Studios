@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amie Studios | Born in the forest, made with love</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="Amie Studios Logo (With BG).png">
+<style>
+:root {
+    --bg: #d1d9b0; --forest: #6b8455; --sage: #94a684;    
+    --black: #2d3625; --white: #fcfdf9; --accent: #ff9f43;  
+}
+
+/* --- SYSTEM --- */
+* { font-family: 'Quicksand', sans-serif !important; box-sizing: border-box; }
+body { 
+    margin: 0; background: var(--bg); color: var(--black); 
+    overflow-x: hidden; scroll-behavior: smooth; 
+    cursor: url('Cursor - 1.png') 16 16, auto !important; 
+}
+
+button, .card, a, .scroll-btn { 
+    cursor: url('Cursor - 2.png') 16 16, pointer !important; 
+}
+
+#cursor-trail {
+    pointer-events: none; position: fixed; top: 0; left: 0;
+    width: 35px; height: 35px; background: var(--forest);
+    border-radius: 50%; opacity: 0.3; z-index: 10000;
+    transform: translate(-50%, -50%); transition: transform 0.1s ease-out;
+}
+
+/* --- MOVING LINE (AT THE TOP) --- */
+.ticker { 
+    background: var(--black); color: var(--white); padding: 18px 0; 
+    overflow: hidden; white-space: nowrap; font-weight: 700; 
+    letter-spacing: 2px; border-bottom: 5px solid var(--forest);
+    position: relative; z-index: 100;
+}
+.ticker-wrap { display: inline-block; animation: scroll 30s linear infinite; }
+@keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+/* --- ANIMATIONS --- */
+.reveal { opacity: 0; transform: translateY(40px); transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* --- HEADER --- */
+header { height: 85vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: var(--sage); color: var(--white); text-align: center; }
+header h1 { font-size: clamp(5rem, 20vw, 12rem); margin: 0; filter: drop-shadow(8px 8px 0px var(--forest)); animation: float 5s ease-in-out infinite; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-25px); } }
+
+/* --- SECTIONS --- */
+section { padding: 100px 8%; max-width: 1400px; margin: auto; }
+.section-title { font-size: 3rem; margin-bottom: 60px; border-left: 12px solid var(--forest); padding-left: 25px; color: var(--forest); }
+
+/* --- BTS GRID --- */
+.bts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+.bts-card { background: var(--white); border-radius: 40px; overflow: hidden; border-bottom: 8px solid var(--sage); transition: 0.3s; }
+.bts-img-container { height: 250px; width: 100%; overflow: hidden; background: #eee; display: flex; align-items: center; justify-content: center; }
+.bts-img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+.bts-card:hover .bts-img-container img { transform: scale(1.1); }
+.bts-content { padding: 30px; }
+
+/* --- SHOP CAROUSEL --- */
+.carousel-wrapper { position: relative; display: flex; align-items: center; }
+.carousel { 
+    display: flex; overflow-x: auto; gap: 35px; padding: 20px 0 60px; 
+    scrollbar-width: none; scroll-snap-type: x mandatory; scroll-behavior: smooth;
+}
+.carousel::-webkit-scrollbar { display: none; }
+
+/* --- PRODUCT CARD HOVER EFFECT --- */
+.card { flex: 0 0 320px; scroll-snap-align: start; background: var(--white); border-radius: 40px; overflow: hidden; transition: 0.4s; border-bottom: 8px solid var(--sage); }
+.img-box { 
+    height: 260px; background: var(--bg); display: flex; align-items: center; 
+    justify-content: center; font-size: 6rem; overflow: hidden; 
+}
+.img-box div { transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.card:hover .img-box div { transform: scale(1.4); } 
+
+.scroll-btn {
+    position: absolute; top: 40%; transform: translateY(-50%);
+    background: var(--black); color: white; border: none; width: 60px; height: 60px;
+    border-radius: 50%; font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
+    z-index: 100; transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+.scroll-btn:hover { background: var(--forest); scale: 1.1; }
+.btn-prev { left: -30px; }
+.btn-next { right: -30px; }
+
+/* --- INFO CARDS --- */
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+.info-card { background: var(--white); border-radius: 40px; padding: 45px; border-bottom: 8px solid var(--sage); transition: 0.3s; }
+.info-card:hover { transform: translateY(-10px); }
+
+/* --- CART UI --- */
+#cart-sidebar { position: fixed; top: 0; right: -450px; width: 420px; height: 100%; background: white; z-index: 9000; transition: 0.5s; padding: 45px; box-shadow: -20px 0 50px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
+#cart-sidebar.active { right: 0; }
+.buy-btn { width: 100%; background: var(--forest); color: white; border: none; padding: 20px; font-weight: 700; border-radius: 18px; cursor: pointer; transition: 0.3s; }
+.buy-btn:hover { background: var(--black); letter-spacing: 1px; }
+#cart-trigger { position: fixed; bottom: 40px; right: 40px; background: var(--black); color: white; width: 80px; height: 80px; border-radius: 50%; z-index: 8000; border: none; font-size: 1.8rem; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+
+/* --- FOOTER --- */
+footer { background: var(--black); color: white; padding: 80px 8% 40px; text-align: center; border-radius: 80px 80px 0 0; margin-top: 50px; }
+.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: left; margin-bottom: 60px; }
+.footer-col h4 { color: var(--sage); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
+.footer-col ul { list-style: none; padding: 0; margin: 0; }
+.footer-col ul li { margin-bottom: 12px; }
+.footer-col ul li a { color: var(--white); text-decoration: none; opacity: 0.7; transition: 0.3s; }
+.footer-col ul li a:hover { opacity: 1; color: var(--bg); }
+</style>
+</head>
+<body>
+
+<div id="cursor-trail"></div>
+
+<div class="ticker">
+    <div class="ticker-wrap">
+        AMIE STUDIOS • HANDMADE BY AFNAN • WORLDWIDE SHIPPING • NO PLASTIC • NO CUSTOM ORDERS FOR NOW • BORN IN THE FOREST, MADE WITH LOVE •
+    </div>
+</div>
+
+<button id="cart-trigger" onclick="toggleCart()">
+    🛒 <div id="cart-count" style="position:absolute; top:0; right:0; background:var(--forest); width:30px; height:30px; border-radius:50%; font-size:0.9rem; display:flex; align-items:center; justify-content:center;">0</div>
+</button>
+
+<div id="cart-sidebar">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
+        <h2 style="color: var(--forest);">Your Batch</h2>
+        <button onclick="toggleCart()" style="background:none; border:none; font-size:2rem;">✕</button>
+    </div>
+    <div id="cart-items" style="flex-grow:1; overflow-y:auto;"></div>
+    <div id="cart-footer" style="border-top:2px solid var(--bg); padding-top:20px;"></div>
+</div>
+
+<header>
+    <h1>Amie</h1>
+    <p style="letter-spacing:8px; text-transform:uppercase; font-weight:700; margin-top:10px;">Born in the forest, made with love</p>
+</header>
+
+<section id="story" class="reveal">
+    <h2 class="section-title">The Studio Story</h2>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap:30px;">
+        
+        <div style="background:var(--white); padding:45px; border-radius:40px; border-left: 12px solid var(--forest);">
+            <h3 style="color:var(--forest); margin-top:0;">Meet the Artist!</h3>
+            <p style="line-height:1.8; opacity:0.8; font-size: 0.95rem;">
+                I am a school student who finds magic in the small details. While my days are filled with classes and projects, I dedicate my weekends and holidays to Amie Studios. <b>As a part-time artist, I kindly ask for your patience with shipping and responses—every piece is worth the wait!</b>
+            </p>
+        </div>
+
+        <div style="background:var(--white); padding:45px; border-radius:40px;">
+            <h3 style="color:var(--forest); margin-top:0;">Our Unique Style</h3>
+            <p style="line-height:1.8; opacity:0.8; font-size: 0.95rem;">
+                We specialize in "Anima Minis"—where nature meets imagination. Whether it's an <b>Avofrog</b> or a <b>Cherribara</b>, our style blends organic textures with cute, expressive characters. You won't find these designs anywhere else; they are exclusive, handcrafted originals.
+            </p>
+        </div>
+
+        <div style="background:var(--white); padding:45px; border-radius:40px; border-bottom: 8px solid var(--sage);">
+            <h3 style="color:var(--forest); margin-top:0;">Eco-Friendly Hearts</h3>
+            <p style="line-height:1.8; opacity:0.8; font-size: 0.95rem;">
+                Born in the forest, we strive to protect it. Our miniatures are <b>100% plastic-free</b>. We use sustainable materials for our clay and ship every order in recyclable, earth-conscious packaging. Art shouldn't cost the Earth.
+            </p>
+        </div>
+
+        <div style="background:var(--white); padding:45px; border-radius:40px;">
+            <h3 style="color:var(--forest); margin-top:0;">The "Amie" Bond</h3>
+            <p style="line-height:1.8; opacity:0.8; font-size: 0.95rem;">
+                In French, <i>Amie</i> means "friend." We don't just sell products; we create tiny companions. Because of the intensive handmade process, we don't offer refunds, but we guarantee that every "friend" is checked for quality before leaving the studio.
+            </p>
+        </div>
+
+        <div style="background:var(--white); padding:45px; border-radius:40px;">
+            <h3 style="color:var(--forest); margin-top:0;">The Medium</h3>
+            <p style="line-height:1.8; opacity:0.8; font-size: 0.95rem;">
+                Every mini is sculpted from <b>homemade cold porcelain clay</b>. It air-dries for 48 hours to reach a sturdy, ceramic-like finish that is incredibly lightweight. A high-gloss protective glaze is then applied to keep your friend vibrant for years.
+            </p>
+        </div>
+
+        <div style="background:var(--forest); color: white; padding:45px; border-radius:40px;">
+            <h3 style="color: var(--bg); margin-top:0;">The Vision</h3>
+            <p style="line-height:1.8; opacity:0.9; font-size: 0.95rem;">
+                Amie Studios is a reminder to slow down and appreciate the handcrafted moments. From our forest studio in India to your home, we bring you small treasures that celebrate the beauty of handmade art.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<section id="bts" class="reveal">
+    <h2 class="section-title">Behind the Scenes</h2>
+    <div class="bts-grid">
+        <div class="bts-card">
+            <div class="bts-img-container">
+                <img src="sculpting.jpg" alt="Sculpting Process"> 
+            </div>
+            <div class="bts-content">
+                <b>01. Sculpting</b>
+                <p style="opacity:0.7; font-size:0.9rem; margin-top:10px;">Mixing our signature cold porcelain clay and hand-sculpting each tiny character with precision tools.</p>
+            </div>
+        </div>
+        <div class="bts-card">
+            <div class="bts-img-container">
+                <img src="curing.jpg" alt="Curing Process"> 
+            </div>
+            <div class="bts-content">
+                <b>02. Curing</b>
+                <p style="opacity:0.7; font-size:0.9rem; margin-top:10px;">The patience phase. Minis air-dry for two full days to achieve a sturdy, ceramic-like finish without the heat.</p>
+            </div>
+        </div>
+        <div class="bts-card">
+            <div class="bts-img-container">
+                <img src="glazing.jpg" alt="Glazing Process"> 
+            </div>
+            <div class="bts-content">
+                <b>03. Glazing</b>
+                <p style="opacity:0.7; font-size:0.9rem; margin-top:10px;">Adding the final shine. A protective high-gloss glaze preserves the colors and adds a touch of magic.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="shop" class="reveal">
+    <h2 class="section-title">Anima Minis Collection</h2>
+    <div class="carousel-wrapper">
+        <button class="scroll-btn btn-prev" onclick="sideScroll(-350)">❮</button>
+        <div class="carousel" id="bakery-carousel"></div>
+        <button class="scroll-btn btn-next" onclick="sideScroll(350)">❯</button>
+    </div>
+</section>
+
+<section id="care" class="reveal">
+    <h2 class="section-title">Care & Shipping</h2>
+    <div class="grid-3">
+        <div class="info-card">
+            <h4 style="color:var(--forest); margin-top:0;">📦 Shipment Details</h4>
+            <ul style="padding-left:18px; font-size:0.9rem; opacity:0.8; line-height:1.8;">
+                <li><b>Processing:</b> 7-14 business days (I work part-time around school!).</li>
+                <li><b>Carrier:</b> We use <b>NimbusPost</b> for tracked shipping.</li>
+                <li><b>No Refunds:</b> Due to the handmade nature of these items, all sales are final.</li>
+                <li><b>Packaging:</b> 100% plastic-free and recyclable.</li>
+            </ul>
+        </div>
+        
+        <div class="info-card">
+            <h4 style="color:var(--forest); margin-top:0;">🛡️ Care Guide</h4>
+            <p style="font-size:0.9rem; opacity:0.8; line-height:1.8;">
+                Keep your minis dry and handle with love! Cold porcelain is water-sensitive, so use a soft brush for dusting.
+            </p>
+        </div>
+
+        <div class="info-card">
+            <h4 style="color:var(--forest); margin-top:0;">📬 Studio Support</h4>
+            <p style="font-size:0.9rem; opacity:0.8; line-height:1.8;">
+                Questions? Email me or DM on Instagram. As I am balancing my studies, please allow a few days for a response!
+            </p>
+            <button onclick="window.open('https://mail.google.com/mail/?view=cm&fs=1&to=afnanfathima53@gmail.com', '_blank')" class="buy-btn" style="display:inline-block; text-align:center; margin-top:15px; font-size:0.8rem; padding:15px;">Email Afnan</button>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-grid">
+        <div class="footer-col">
+            <h4>Navigate</h4>
+            <ul>
+                <li><a href="#story">Our Story</a></li>
+                <li><a href="#bts">The Process</a></li>
+                <li><a href="#shop">Shop All</a></li>
+                <li><a href="#care">Shipment & Care</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Policy</h4>
+            <ul>
+                <li><a href="javascript:void(0)" onclick="window.open('https://mail.google.com/mail/?view=cm&fs=1&to=afnanfathima53@gmail.com', '_blank')">Contact Support</a></li>
+                <li style="opacity: 0.7; color: white;">No Refund Policy</li>
+                <li><a href="#care">Shipping Info</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Connect</h4>
+            <ul>
+                <li><a href="https://www.instagram.com/amie_studios_/" target="_blank">Instagram</a></li>
+            </ul>
+        </div>
+    </div>
+    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 40px;">
+        <div style="font-size: 2.5rem; font-weight: 700; color: var(--sage);">Amie Studios</div>
+        <p style="opacity:0.4; margin-top:15px; letter-spacing: 2px; font-size:0.75rem;">
+            HANDMADE WITH LOVE • © 2026 AMIE STUDIOS BY AFNAN
+        </p>
+    </div>
+</footer>
+
+<script>
+const products = [
+    {id:"a1", name:"Avofrog", price:380, icon:"🐸", type:"Charm"},
+    {id:"a2", name:"Kiwanda", price:380, icon:"🐼", type:"Charm"},
+    {id:"a3", name:"Peach-Jelly", price:280, icon:"🍑", type:"Charm"},
+    {id:"a4", name:"Bluebeary", price:300, icon:"🐻", type:"Charm"},
+    {id:"a5", name:"Cherribara", price:320, icon:"🍒", type:"Charm"},
+    {id:"k1", name:"Buffin", price:350, icon:"🐝", type:"Keychain"},
+    {id:"k2", name:"Macacat", price:350, icon:"🐱", type:"Keychain"},
+    {id:"k3", name:"Raspber-puss", price:380, icon:"🐙", type:"Keychain"},
+    {id:"k4", name:"Waffunny", price:350, icon:"🐰", type:"Keychain"},
+    {id:"k5", name:"Choc-Duck", price:320, icon:"🦆", type:"Keychain"}
+];
+
+let cart = {};
+
+window.onload = () => {
+    products.forEach(p => {
+        document.getElementById('bakery-carousel').innerHTML += `
+            <div class="card">
+                <div class="img-box"><div>${p.icon}</div></div>
+                <div style="padding:30px; text-align:center;">
+                    <small style="opacity:0.5;">${p.type}</small>
+                    <h4 style="margin:10px 0;">${p.name}</h4>
+                    <p style="color:var(--forest); font-weight:700;">₹${p.price}</p>
+                    <button class="buy-btn" onclick="addToCart('${p.id}')">Add to Order</button>
+                </div>
+            </div>`;
+    });
+    const obs = new IntersectionObserver((es) => {
+        es.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+};
+
+function sideScroll(dist) { document.getElementById('bakery-carousel').scrollBy({ left: dist, behavior: 'smooth' }); }
+
+function addToCart(id) { cart[id] = (cart[id] || 0) + 1; updateCart(); toggleCart(true); }
+
+function updateCart() {
+    let list = document.getElementById('cart-items'), sub = 0, count = 0, bodyText = "";
+    list.innerHTML = '';
+    Object.keys(cart).forEach(id => {
+        const p = products.find(x => x.id === id);
+        sub += (p.price * cart[id]); count += cart[id];
+        bodyText += `%0A- ${p.name} (x${cart[id]})`;
+        list.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px; background:#f9f9f9; padding:15px; border-radius:15px;"><span>${p.name}</span><b>₹${p.price*cart[id]}</b></div>`;
+    });
+// Replace the button line inside your updateCart function:
+document.getElementById('cart-footer').innerHTML = count === 0 ? 'Empty' : `
+    <div style="display:flex; justify-content:space-between;"><b>Total:</b> <b>₹${sub}</b></div>
+    <button class="buy-btn" style="margin-top:20px;" onclick="window.open('https://mail.google.com/mail/?view=cm&fs=1&to=afnanfathima53@gmail.com&su=New Order from Amie Studios&body=Order Details:${bodyText}%0A%0AAddress:%0APhone:', '_blank')">Checkout via Gmail</button>`;
+}
+
+function toggleCart(open = false) { 
+    const c = document.getElementById('cart-sidebar');
+    open ? c.classList.add('active') : c.classList.toggle('active');
+}
+
+document.addEventListener("mousemove", (e) => {
+    const t = document.getElementById("cursor-trail");
+    t.style.left = e.clientX + "px"; t.style.top = e.clientY + "px";
+});
+</script>
+</body>
+</html>
