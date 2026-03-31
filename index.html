@@ -109,6 +109,41 @@ footer { background: var(--black); color: white; padding: 80px 8% 40px; text-ali
 .footer-col ul li { margin-bottom: 12px; }
 .footer-col ul li a { color: var(--white); text-decoration: none; opacity: 0.7; transition: 0.3s; }
 .footer-col ul li a:hover { opacity: 1; color: var(--bg); }
+
+/* --- QUANTITY SELECTOR STYLE --- */
+.qty-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 15px 0;
+    background: var(--bg);
+    padding: 8px;
+    border-radius: 12px;
+}
+.qty-btn {
+    background: var(--white);
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    font-weight: bold;
+    color: var(--forest);
+    transition: 0.2s;
+}
+.qty-btn:hover { background: var(--forest); color: white; }
+.qty-num { font-weight: 700; min-width: 20px; }
+
+/* Mini Qty for Cart Sidebar */
+.cart-qty-btn {
+    padding: 2px 8px;
+    background: var(--forest);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin: 0 5px;
+}
+
 </style>
 </head>
 <body>
@@ -223,11 +258,8 @@ footer { background: var(--black); color: white; padding: 80px 8% 40px; text-ali
 
 <section id="shop" class="reveal">
     <h2 class="section-title">Anima Minis Collection</h2>
-    <div class="carousel-wrapper">
-        <button class="scroll-btn btn-prev" onclick="sideScroll(-350)">❮</button>
-        <div class="carousel" id="bakery-carousel"></div>
-        <button class="scroll-btn btn-next" onclick="sideScroll(350)">❯</button>
-    </div>
+    <div class="grid-3" id="bakery-grid">
+        </div>
 </section>
 
 <section id="care" class="reveal">
@@ -260,6 +292,34 @@ footer { background: var(--black); color: white; padding: 80px 8% 40px; text-ali
     </div>
 </section>
 
+<section id="policies" class="reveal">
+    <h2 class="section-title">Shop Policies</h2>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap:30px;">
+        
+        <div style="background:var(--white); padding:45px; border-radius:40px; border-top: 8px solid var(--forest);">
+            <h3 style="color:var(--forest); margin-top:0;">Step-by-Step: How to Order</h3>
+            <ol style="line-height:1.8; opacity:0.8; font-size: 0.95rem; padding-left: 20px;">
+                <li><b>Checkout:</b> Click "Checkout via Gmail" to send your order request.</li>
+                <li><b>Confirmation:</b> I will reply with your total (including shipping) and my <b>UPI QR Code</b>.</li>
+                <li><b>Payment:</b> Share a screenshot of your payment to confirm your slot.</li>
+                <li><b>Creation:</b> Since I am a student, I sculpt on weekends/holidays. Your mini then air-dries for 48 hours!</li>
+                <li><b>Shipping:</b> Once cured and glazed, I book your <b>NimbusPost</b> pickup and email you the tracking link.</li>
+            </ol>
+        </div>
+
+        <div style="background:var(--white); padding:45px; border-radius:40px; border-top: 8px solid var(--forest);">
+            <h3 style="color:var(--forest); margin-top:0;">Shipping & Returns</h3>
+            <ul style="list-style: none; padding: 0; line-height:1.8; opacity:0.8; font-size: 0.95rem;">
+                <li style="margin-bottom: 15px;">📦 <b>Timeline:</b> Please allow <b>7-14 business days</b> for processing. Quality takes time!</li>
+                <li style="margin-bottom: 15px;">🌍 <b>Worldwide:</b> We ship globally from India using tracked couriers.</li>
+                <li style="margin-bottom: 15px;">🚫 <b>No Refunds:</b> Every "Amie" is handmade and unique. All sales are final.</li>
+                <li>🛡️ <b>Damages:</b> If a mini arrives broken, please email a <b>video of the unboxing</b> within 24 hours for a resolution.</li>
+            </ul>
+        </div>
+
+    </div>
+</section>
+
 <footer>
     <div class="footer-grid">
         <div class="footer-col">
@@ -268,7 +328,7 @@ footer { background: var(--black); color: white; padding: 80px 8% 40px; text-ali
                 <li><a href="#story">Our Story</a></li>
                 <li><a href="#bts">The Process</a></li>
                 <li><a href="#shop">Shop All</a></li>
-                <li><a href="#care">Shipment & Care</a></li>
+                <li><a href="#policies">How to Order</a></li> <li><a href="#care">Shipment & Care</a></li>
             </ul>
         </div>
         <div class="footer-col">
@@ -276,7 +336,6 @@ footer { background: var(--black); color: white; padding: 80px 8% 40px; text-ali
             <ul>
                 <li><a href="javascript:void(0)" onclick="window.open('https://mail.google.com/mail/?view=cm&fs=1&to=afnanfathima53@gmail.com', '_blank')">Contact Support</a></li>
                 <li style="opacity: 0.7; color: white;">No Refund Policy</li>
-                <li style="opacity: 0.7; color: white;">No Retail Sale</li>
                 <li><a href="#care">Shipping Info</a></li>
             </ul>
         </div>
@@ -312,51 +371,103 @@ const products = [
 let cart = {};
 
 window.onload = () => {
-    products.forEach(p => {
-        document.getElementById('bakery-carousel').innerHTML += `
-            <div class="card">
-                <div class="img-box"><div>${p.icon}</div></div>
-                <div style="padding:30px; text-align:center;">
-                    <small style="opacity:0.5;">${p.type}</small>
-                    <h4 style="margin:10px 0;">${p.name}</h4>
-                    <p style="color:var(--forest); font-weight:700;">₹${p.price}</p>
-                    <button class="buy-btn" onclick="addToCart('${p.id}')">Add to Order</button>
-                </div>
-            </div>`;
-    });
+    // 1. Render Products into the Grid
+    const shopGrid = document.getElementById('bakery-grid');
+    if(shopGrid) {
+        products.forEach(p => {
+            shopGrid.innerHTML += `
+                <div class="card reveal">
+                    <div class="img-box"><div>${p.icon}</div></div>
+                    <div style="padding:30px; text-align:center;">
+                        <small style="opacity:0.5;">${p.type}</small>
+                        <h4 style="margin:10px 0;">${p.name}</h4>
+                        <p style="color:var(--forest); font-weight:700;">₹${p.price}</p>
+                        
+                        <div class="qty-controls">
+                            <button class="qty-btn" onclick="changeGridQty('${p.id}', -1)">-</button>
+                            <span class="qty-num" id="qty-${p.id}">1</span>
+                            <button class="qty-btn" onclick="changeGridQty('${p.id}', 1)">+</button>
+                        </div>
+
+                        <button class="buy-btn" onclick="addFromGrid('${p.id}')">Add to Order</button>
+                    </div>
+                </div>`;
+        });
+    }
+
+    // 2. Initialize Scroll Animations
     const obs = new IntersectionObserver((es) => {
-        es.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+        es.forEach(e => { 
+            if(e.isIntersecting) e.target.classList.add('visible'); 
+        });
     }, { threshold: 0.1 });
+
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 };
 
-function sideScroll(dist) { document.getElementById('bakery-carousel').scrollBy({ left: dist, behavior: 'smooth' }); }
+// --- LOGIC FUNCTIONS ---
 
-function addToCart(id) { cart[id] = (cart[id] || 0) + 1; updateCart(); toggleCart(true); }
+function changeGridQty(id, amount) {
+    let el = document.getElementById(`qty-${id}`);
+    let current = parseInt(el.innerText);
+    if (current + amount >= 1) el.innerText = current + amount;
+}
+
+function addFromGrid(id) {
+    let qty = parseInt(document.getElementById(`qty-${id}`).innerText);
+    cart[id] = (cart[id] || 0) + qty;
+    updateCart();
+    toggleCart(true);
+    document.getElementById(`qty-${id}`).innerText = 1; 
+}
 
 function updateCart() {
     let list = document.getElementById('cart-items'), sub = 0, count = 0, bodyText = "";
     list.innerHTML = '';
+    
     Object.keys(cart).forEach(id => {
-        const p = products.find(x => x.id === id);
-        sub += (p.price * cart[id]); count += cart[id];
-        bodyText += `%0A- ${p.name} (x${cart[id]})`;
-        list.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px; background:#f9f9f9; padding:15px; border-radius:15px;"><span>${p.name}</span><b>₹${p.price*cart[id]}</b></div>`;
+        if(cart[id] > 0) {
+            const p = products.find(x => x.id === id);
+            sub += (p.price * cart[id]);
+            count += cart[id];
+            bodyText += `%0A- ${p.name} (x${cart[id]})`;
+            
+            list.innerHTML += `
+                <div style="display:flex; flex-direction:column; margin-bottom:15px; background:#f9f9f9; padding:15px; border-radius:15px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                        <span>${p.name}</span>
+                        <b>₹${p.price * cart[id]}</b>
+                    </div>
+                    <div style="display:flex; align-items:center; font-size:0.9rem;">
+                        <button class="cart-qty-btn" onclick="updateCartQty('${id}', -1)">-</button>
+                        <span>Qty: ${cart[id]}</span>
+                        <button class="cart-qty-btn" onclick="updateCartQty('${id}', 1)">+</button>
+                    </div>
+                </div>`;
+        }
     });
-// Replace the button line inside your updateCart function:
-document.getElementById('cart-footer').innerHTML = count === 0 ? 'Empty' : `
-    <div style="display:flex; justify-content:space-between;"><b>Total:</b> <b>₹${sub}</b></div>
-    <button class="buy-btn" style="margin-top:20px;" onclick="window.open('https://mail.google.com/mail/?view=cm&fs=1&to=afnanfathima53@gmail.com&su=New Order from Amie Studios&body=Order Details:${bodyText}%0A%0AAddress:%0APhone:', '_blank')">Checkout via Gmail</button>`;
+
+    document.getElementById('cart-count').innerText = count;
+    document.getElementById('cart-footer').innerHTML = count === 0 ? '<p style="text-align:center; opacity:0.5;">Your batch is empty</p>' : `
+        <div style="display:flex; justify-content:space-between; margin-bottom:15px;"><b>Total:</b> <b>₹${sub}</b></div>
+        <button class="buy-btn" onclick="window.open('https://mail.google.com/mail/?view=cm&fs=1&to=afnanfathima53@gmail.com&su=New Order from Amie Studios&body=Order Details:${bodyText}%0A%0AAddress:%0APhone:', '_blank')">Checkout via Gmail</button>`;
+}
+
+function updateCartQty(id, amount) {
+    cart[id] += amount;
+    if (cart[id] <= 0) delete cart[id];
+    updateCart();
 }
 
 function toggleCart(open = false) { 
     const c = document.getElementById('cart-sidebar');
-    open ? c.classList.add('active') : c.classList.toggle('active');
+    if(open === true) c.classList.add('active');
+    else c.classList.toggle('active');
 }
 
 document.addEventListener("mousemove", (e) => {
     const t = document.getElementById("cursor-trail");
-    t.style.left = e.clientX + "px"; t.style.top = e.clientY + "px";
+    if(t) { t.style.left = e.clientX + "px"; t.style.top = e.clientY + "px"; }
 });
 </script>
 </body>
