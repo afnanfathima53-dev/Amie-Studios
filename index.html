@@ -12,6 +12,18 @@
     --black: #2d3625; --white: #fcfdf9; --accent: #ff9f43;  
 }
 
+/* Target the cards in the Story section */
+#story div > div {
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
+    will-change: transform; /* Keeps the animation buttery smooth */
+}
+
+#story div > div:hover {
+    transform: scale(1.05); /* Adjust 1.05 to 1.1 if you want a bigger zoom */
+    z-index: 10; /* Ensures the zoomed card stays on top of others */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1); /* Optional: adds a soft shadow on hover */
+}
+
 /* --- SYSTEM --- */
 * { font-family: 'Quicksand', sans-serif !important; box-sizing: border-box; }
 body { 
@@ -71,7 +83,15 @@ section { padding: 100px 8%; max-width: 1400px; margin: auto; }
 .carousel::-webkit-scrollbar { display: none; }
 
 /* --- PRODUCT CARD HOVER EFFECT --- */
-.card { flex: 0 0 320px; scroll-snap-align: start; background: var(--white); border-radius: 40px; overflow: hidden; transition: 0.4s; border-bottom: 8px solid var(--sage); }
+.card { 
+    width: 100%; /* Let the Grid determine the width */
+    scroll-snap-align: start; 
+    background: var(--white); 
+    border-radius: 40px; 
+    overflow: hidden; 
+    transition: 0.4s; 
+    border-bottom: 8px solid var(--sage); 
+}
 .img-box { 
     height: 260px; background: var(--bg); display: flex; align-items: center; 
     justify-content: center; font-size: 6rem; overflow: hidden; 
@@ -90,7 +110,13 @@ section { padding: 100px 8%; max-width: 1400px; margin: auto; }
 .btn-next { right: -30px; }
 
 /* --- INFO CARDS --- */
-.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+.grid-3 { 
+    display: grid; 
+    /* This is the magic line for responsiveness */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+    gap: 30px; 
+    width: 100%;
+}
 .info-card { background: var(--white); border-radius: 40px; padding: 45px; border-bottom: 8px solid var(--sage); transition: 0.3s; }
 .info-card:hover { transform: translateY(-10px); }
 
@@ -188,7 +214,7 @@ footer { background: var(--black); color: white; padding: 80px 8% 40px; text-ali
         <div style="background:var(--white); padding:45px; border-radius:40px;">
             <h3 style="color:var(--forest); margin-top:0;">Our Unique Style</h3>
             <p style="line-height:1.8; opacity:0.8; font-size: 0.95rem;">
-                We specialize in "Anima Minis"—where nature meets imagination. Whether it's an <b>Avofrog</b> or a <b>Cherribara</b>, our style blends organic textures with cute, expressive characters. You won't find these designs anywhere else; they are exclusive, handcrafted originals.
+                We specialize in "Animal Minis"—where nature meets imagination. Whether it's an <b>Avofrog</b> or a <b>Cherribara</b>, our style blends organic textures with cute, expressive characters. You won't find these designs anywhere else; they are exclusive, handcrafted originals.
             </p>
         </div>
 
@@ -257,7 +283,7 @@ footer { background: var(--black); color: white; padding: 80px 8% 40px; text-ali
 </section>
 
 <section id="shop" class="reveal">
-    <h2 class="section-title">Anima Minis Collection</h2>
+    <h2 class="section-title">Animal Minis Collection</h2>
     <div class="grid-3" id="bakery-grid">
         </div>
 </section>
@@ -342,7 +368,7 @@ footer { background: var(--black); color: white; padding: 80px 8% 40px; text-ali
         <div class="footer-col">
             <h4>Connect</h4>
             <ul>
-                <li><a href="https://www.instagram.com/amie_studios_/" target="_blank">Instagram</a></li>
+                <li><a href="https://www.instagram.com/amie_studios_/" target="_blank">Youtube</a></li>
             </ul>
         </div>
     </div>
@@ -356,29 +382,40 @@ footer { background: var(--black); color: white; padding: 80px 8% 40px; text-ali
 
 <script>
 const products = [
-    {id:"a1", name:"Avofrog", price:380, icon:"🐸", type:"Charm"},
-    {id:"a2", name:"Kiwanda", price:380, icon:"🐼", type:"Charm"},
-    {id:"a3", name:"Peach-Jelly", price:280, icon:"🍑", type:"Charm"},
-    {id:"a4", name:"Bluebeary", price:300, icon:"🐻", type:"Charm"},
-    {id:"a5", name:"Cherribara", price:320, icon:"🍒", type:"Charm"},
-    {id:"k1", name:"Buffin", price:350, icon:"🐝", type:"Keychain"},
-    {id:"k2", name:"Macacat", price:350, icon:"🐱", type:"Keychain"},
-    {id:"k3", name:"Raspber-puss", price:380, icon:"🐙", type:"Keychain"},
-    {id:"k4", name:"Waffunny", price:350, icon:"🐰", type:"Keychain"},
-    {id:"k5", name:"Choc-Duck", price:320, icon:"🦆", type:"Keychain"}
+    /* Series 1: The Fruity Friends (Live) */
+    {id:"s1-1", name:"Berry-Puss", price:380, icon:"🐙", type:"Combination: Octopus + Strawberry"},
+    {id:"s1-2", name:"Citrus-Bun", price:350, icon:"🐰", type:"Combination: Rabbit + Orange"},
+    {id:"s1-3", name:"Peach-Jelly", price:280, icon:"🪼", type:"Combination: Jellyfish + Peach"},
+    {id:"s1-4", name:"Blue-Frog", price:300, icon:"🐸", type:"Combination: Frog + Blueberry"},
+    {id:"s1-5", name:"Cherribara", price:320, icon:"🍒", type:"Combination: Capybara + Cherry"}
+
+    /* Series 2: The Bakery Batch (Hidden for YouTube Launch)
+    {id:"s2-1", name:"Buffin", price:350, icon:"🐝", type:"Combination: Bee + Muffin"},
+    {id:"s2-2", name:"Macacat", price:350, icon:"🐱", type:"Combination: Cat + Orange Macaron"},
+    {id:"s2-3", name:"Waffunny", price:350, icon:"🐻", type:"Combination: Bear + Waffle"},
+    {id:"s2-4", name:"Cooki-Panda", price:350, icon:"🐼", type:"Combination: Panda + Cookie"},
+    {id:"s2-5", name:"Choc-Duck", price:320, icon:"🦆", type:"Combination: Duck + Chocolate Bar"},
+    */
 ];
 
 let cart = {};
 
 window.onload = () => {
-    // 1. Render Products into the Grid
     const shopGrid = document.getElementById('bakery-grid');
     if(shopGrid) {
         products.forEach(p => {
+            // ONLY check for "Charm" here
+            const isPreorder = (p.type === "Charm");
+            
+            // This creates the green label ONLY for Charms
+            const label = isPreorder ? `<div style="background:var(--forest); color:white; font-size:0.7rem; padding:4px 10px; border-radius:10px; margin-bottom:10px; display:inline-block; font-weight:700;">PRE-ORDER AVAILABLE</div>` : "";
+            
             shopGrid.innerHTML += `
                 <div class="card reveal">
                     <div class="img-box"><div>${p.icon}</div></div>
                     <div style="padding:30px; text-align:center;">
+                        ${label} 
+                        <br>
                         <small style="opacity:0.5;">${p.type}</small>
                         <h4 style="margin:10px 0;">${p.name}</h4>
                         <p style="color:var(--forest); font-weight:700;">₹${p.price}</p>
@@ -389,13 +426,14 @@ window.onload = () => {
                             <button class="qty-btn" onclick="changeGridQty('${p.id}', 1)">+</button>
                         </div>
 
-                        <button class="buy-btn" onclick="addFromGrid('${p.id}')">Add to Order</button>
+                        <button class="buy-btn" onclick="addFromGrid('${p.id}')">
+                            ${isPreorder ? 'Pre-order Now' : 'Add to Order'}
+                        </button>
                     </div>
                 </div>`;
         });
     }
 
-    // 2. Initialize Scroll Animations
     const obs = new IntersectionObserver((es) => {
         es.forEach(e => { 
             if(e.isIntersecting) e.target.classList.add('visible'); 
