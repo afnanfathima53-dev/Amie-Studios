@@ -381,13 +381,16 @@ footer { background: var(--black); color: white; padding: 80px 8% 40px; text-ali
 </footer>
 
 <script>
+// 1. Initialize cart from LocalStorage OR an empty object if nothing exists
+let cart = JSON.parse(localStorage.getItem('amieCart')) || {};
+
 const products = [
-    /* Series 1: The Fruity Friends (Live) */
     {id:"s1-1", name:"Berry-Puss", price:380, icon:"🐙", type:"Combination: Octopus + Strawberry"},
     {id:"s1-2", name:"Citrus-Bee", price:350, icon:"🐝", type:"Combination: Bee + Orange"},
-    {id:"s1-3", name:"Peach-Jelly", price:280, icon:"🪼", type:"Combination: Jellyfish + Peach"},
+    {id:"s1-3", name:"Blackberry-Jelly", price:280, icon:"🪼", type:"Combination: Jellyfish + Blackberry"}, // Updated name!
     {id:"s1-4", name:"Blue-Cat", price:300, icon:"🐱", type:"Combination: Cat + Blueberry"},
     {id:"s1-5", name:"Cherri-Frog", price:320, icon:"🐸", type:"Combination: Frog + Cherry"}, 
+];
 
     /* Series 2: The Bakery Batch (Hidden for YouTube Launch)
     {id:"s2-1", name:"Bun-ffin", price:350, icon:"🐰", type:"Combination: Rabbit + Muffin"},
@@ -396,18 +399,15 @@ const products = [
     {id:"s2-4", name:"Cooki-Panda", price:350, icon:"🐼", type:"Combination: Panda + Cookie"},
     {id:"s2-5", name:"Choc-Duck", price:320, icon:"🦆", type:"Combination: Duck + Chocolate Bar"},
     */
-];
-
-let cart = {};
 
 window.onload = () => {
+    // 2. Immediately render the saved cart so it shows up on refresh
+    updateCart();
+
     const shopGrid = document.getElementById('bakery-grid');
     if(shopGrid) {
         products.forEach(p => {
-            // ONLY check for "Charm" here
             const isPreorder = (p.type === "Charm");
-            
-            // This creates the green label ONLY for Charms
             const label = isPreorder ? `<div style="background:var(--forest); color:white; font-size:0.7rem; padding:4px 10px; border-radius:10px; margin-bottom:10px; display:inline-block; font-weight:700;">PRE-ORDER AVAILABLE</div>` : "";
             
             shopGrid.innerHTML += `
@@ -443,8 +443,6 @@ window.onload = () => {
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 };
 
-// --- LOGIC FUNCTIONS ---
-
 function changeGridQty(id, amount) {
     let el = document.getElementById(`qty-${id}`);
     let current = parseInt(el.innerText);
@@ -452,11 +450,19 @@ function changeGridQty(id, amount) {
 }
 
 function addFromGrid(id) {
-    let qty = parseInt(document.getElementById(`qty-${id}`).innerText);
-    cart[id] = (cart[id] || 0) + qty;
+    const qtyNum = document.getElementById(`qty-${id}`);
+    const quantity = parseInt(qtyNum.innerText); // Corrected to .innerText to match your HTML
+
+    if (cart[id]) {
+        cart[id] += quantity;
+    } else {
+        cart[id] = quantity;
+    }
+
+    // SAVE TO LOCAL STORAGE
+    localStorage.setItem('amieCart', JSON.stringify(cart));
     updateCart();
-    toggleCart(true);
-    document.getElementById(`qty-${id}`).innerText = 1; 
+    toggleCart(true); // Open sidebar to show it was added!
 }
 
 function updateCart() {
@@ -466,6 +472,8 @@ function updateCart() {
     Object.keys(cart).forEach(id => {
         if(cart[id] > 0) {
             const p = products.find(x => x.id === id);
+            if(!p) return;
+            
             sub += (p.price * cart[id]);
             count += cart[id];
             bodyText += `%0A- ${p.name} (x${cart[id]})`;
@@ -485,15 +493,50 @@ function updateCart() {
         }
     });
 
+    // --- DISCOUNT LOGIC ---
+    let finalTotal = sub;
+    let discountRow = "";
+    
+    if (count >= 5) {
+        finalTotal = sub - 50;
+        discountRow = `<div style="display:flex; justify-content:space-between; color:#e74c3c; font-size:0.9rem; margin-bottom:5px;">
+                        <span>5+ Items Discount:</span>
+                        <span>-₹50</span>
+                       </div>`;
+        bodyText += `%0A%0A(DISCOUNT APPLIED: -₹50 for 5+ items)`;
+    }
+
     document.getElementById('cart-count').innerText = count;
-    document.getElementById('cart-footer').innerHTML = count === 0 ? '<p style="text-align:center; opacity:0.5;">Your batch is empty</p>' : `
-        <div style="display:flex; justify-content:space-between; margin-bottom:15px;"><b>Total:</b> <b>₹${sub}</b></div>
-        <button class="buy-btn" onclick="window.open('https://mail.google.com/mail/?view=cm&fs=1&to=afnanfathima53@gmail.com&su=New Order from Amie Studios&body=Order Details:${bodyText}%0A%0AAddress:%0APhone:', '_blank')">Checkout via Gmail</button>`;
+    const footer = document.getElementById('cart-footer');
+    
+    if (count === 0) {
+        footer.innerHTML = '<p style="text-align:center; opacity:0.5;">Your batch is empty</p>';
+    } else {
+        footer.innerHTML = `
+        <div style="margin-bottom:15px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                <span>Subtotal:</span>
+                <span>₹${sub}</span>
+            </div>
+            ${discountRow}
+            <div style="display:flex; justify-content:space-between; border-top:1px solid #ddd; padding-top:10px; font-weight:bold; font-size:1.1rem;">
+                <span>Total:</span>
+                <span>₹${finalTotal}</span>
+            </div>
+        </div>
+        <button class="buy-btn" onclick="window.open('https://mail.google.com/mail/?view=cm&fs=1&to=afnanfathima53@gmail.com&su=New Order from Amie Studios&body=Order Details:${bodyText}%0A%0AFinal Total: ₹${finalTotal}%0A%0AAddress:%0APhone:', '_blank')">Checkout via Gmail</button>`;
+    }
 }
 
 function updateCartQty(id, amount) {
-    cart[id] += amount;
-    if (cart[id] <= 0) delete cart[id];
+    if (cart[id]) {
+        cart[id] += amount;
+        if (cart[id] <= 0) {
+            delete cart[id];
+        }
+    }
+    // SAVE UPDATED QTY TO LOCAL STORAGE
+    localStorage.setItem('amieCart', JSON.stringify(cart));
     updateCart();
 }
 
