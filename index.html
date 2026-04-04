@@ -12,6 +12,39 @@
     --black: #2d3625; --white: #fcfdf9; --accent: #ff9f43;  
 }
 
+/* --- OFFERS SECTION --- */
+.offers-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 50px;
+}
+.offer-card {
+    background: linear-gradient(135deg, #fff9f0 0%, #fff 100%);
+    border: 2px dashed var(--forest);
+    border-radius: 25px;
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+    transition: 0.3s;
+}
+.offer-card:hover { transform: scale(1.02); border-style: solid; }
+.offer-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--accent);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.offer-card h3 { color: var(--forest); margin: 0 0 10px 0; font-size: 1.4rem; }
+.offer-card p { font-size: 0.9rem; opacity: 0.8; margin-bottom: 15px; }
+.expiry { font-size: 0.75rem; font-weight: 700; color: #e74c3c; text-transform: uppercase; }
+
 /* Target the cards in the Story section */
 #story div > div {
     transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
@@ -282,6 +315,29 @@ footer { background: var(--black); color: white; padding: 80px 8% 40px; text-ali
     </div>
 </section>
 
+<section id="rewards" class="reveal">
+    <h2 class="section-title">Bakery Rewards</h2>
+    <div class="offers-container">
+        
+        <div class="offer-card">
+            <div class="offer-badge">Automatic</div>
+            <h3>The "Full Tray" Bonus</h3>
+            <p>Adopt 5 or more Bakery Minis and get an instant deduction. It's like getting the fifth one at a huge discount!</p>
+            <div style="color: var(--forest); font-weight: 800; font-size: 1.2rem; margin-bottom: 10px;">SAVE ₹50 OFF</div>
+            <div class="expiry">Valid: Bakery Series Launch</div>
+        </div>
+
+        <div class="offer-card">
+            <div class="offer-badge" style="background:#e67e22;">FREE GIFT</div>
+            <h3>The "Secret Slice"</h3>
+            <p>Orders of 5+ minis include a <b>Secret Cake Slice Charm</b>. (Hand-textured sponge cake with "cream" layers and an eye-pin!)</p>
+            <div style="color: #e67e22; font-weight: 800; font-size: 1.2rem; margin-bottom: 10px;">FREE CAKE CHARM</div>
+            <div class="expiry">Offer Validity: Permanent Collection Offer</div>
+        </div>
+
+    </div>
+</section>
+
 <section id="shop" class="reveal">
     <h2 class="section-title">Animal Minis Collection</h2>
     <div class="grid-3" id="bakery-grid">
@@ -311,7 +367,7 @@ footer { background: var(--black); color: white; padding: 80px 8% 40px; text-ali
         <div class="info-card">
             <h4 style="color:var(--forest); margin-top:0;">📬 Studio Support</h4>
             <p style="font-size:0.9rem; opacity:0.8; line-height:1.8;">
-                Questions? Email me or DM on Instagram. As I am balancing my studies, please allow a few days for a response!
+                Questions? Email me or comment on Youtube. As I am balancing my studies, please allow a few days for a response!
             </p>
             <button onclick="window.open('https://mail.google.com/mail/?view=cm&fs=1&to=afnanfathima53@gmail.com', '_blank')" class="buy-btn" style="display:inline-block; text-align:center; margin-top:15px; font-size:0.8rem; padding:15px;">Email Afnan</button>
         </div>
@@ -385,20 +441,19 @@ footer { background: var(--black); color: white; padding: 80px 8% 40px; text-ali
 let cart = JSON.parse(localStorage.getItem('amieCart')) || {};
 
 const products = [
-    {id:"s1-1", name:"Berry-Puss", price:380, icon:"🐙", type:"Combination: Octopus + Strawberry"},
-    {id:"s1-2", name:"Citrus-Bee", price:350, icon:"🐝", type:"Combination: Bee + Orange"},
-    {id:"s1-3", name:"Blackberry-Jelly", price:280, icon:"🪼", type:"Combination: Jellyfish + Blackberry"}, // Updated name!
-    {id:"s1-4", name:"Blue-Cat", price:300, icon:"🐱", type:"Combination: Cat + Blueberry"},
-    {id:"s1-5", name:"Cherri-Frog", price:320, icon:"🐸", type:"Combination: Frog + Cherry"}, 
-];
-
-    /* Series 2: The Bakery Batch (Hidden for YouTube Launch)
     {id:"s2-1", name:"Bun-ffin", price:350, icon:"🐰", type:"Combination: Rabbit + Muffin"},
     {id:"s2-2", name:"Capy-Mac", price:350, icon:"🦫", type:"Combination: Capybara + Orange Macaron"},
-    {id:"s2-3", name:"Waffunny", price:350, icon:"🐻", type:"Combination: Bear + Waffle"},
+    {id:"s2-3", name:"Bear-y Waffle", price:350, icon:"🐻", type:"Combination: Bear + Waffle"},
     {id:"s2-4", name:"Cooki-Panda", price:350, icon:"🐼", type:"Combination: Panda + Cookie"},
     {id:"s2-5", name:"Choc-Duck", price:320, icon:"🦆", type:"Combination: Duck + Chocolate Bar"},
-    */
+];
+
+ /*Series 1: The Fruit Batch
+    {id:"s1-1", name:"Berry-Puss", price:380, icon:"🐙", type:"Combination: Octopus + Strawberry"},
+    {id:"s1-2", name:"Citrus-Bee", price:350, icon:"🐝", type:"Combination: Bee + Orange"},
+    {id:"s1-3", name:"Blackberry-Jelly", price:280, icon:"🪼", type:"Combination: Jellyfish + Blackberry"},
+    {id:"s1-4", name:"Blue-Cat", price:300, icon:"🐱", type:"Combination: Cat + Blueberry"},
+    {id:"s1-5", name:"Cherri-Frog", price:320, icon:"🐸", type:"Combination: Frog + Cherry"}, */
 
 window.onload = () => {
     // 2. Immediately render the saved cart so it shows up on refresh
@@ -479,7 +534,7 @@ function updateCart() {
             bodyText += `%0A- ${p.name} (x${cart[id]})`;
             
             list.innerHTML += `
-                <div style="display:flex; flex-direction:column; margin-bottom:15px; background:#f9f9f9; padding:15px; border-radius:15px;">
+                <div style="display:flex; flex-direction:column; margin-bottom:15px; background:#f9f9f9; padding:15px; border-radius:15px; border-left: 5px solid var(--forest);">
                     <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
                         <span>${p.name}</span>
                         <b>₹${p.price * cart[id]}</b>
@@ -493,17 +548,24 @@ function updateCart() {
         }
     });
 
-    // --- DISCOUNT LOGIC ---
+    // --- DISCOUNT & FREEBIE LOGIC ---
     let finalTotal = sub;
     let discountRow = "";
     
     if (count >= 5) {
-        finalTotal = sub - 50;
-        discountRow = `<div style="display:flex; justify-content:space-between; color:#e74c3c; font-size:0.9rem; margin-bottom:5px;">
-                        <span>5+ Items Discount:</span>
-                        <span>-₹50</span>
-                       </div>`;
-        bodyText += `%0A%0A(DISCOUNT APPLIED: -₹50 for 5+ items)`;
+        finalTotal = sub - 50; // Your ₹50 deduction
+        discountRow = `
+            <div style="background: #fff9f0; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px dashed #ff9f43;">
+                <div style="display:flex; justify-content:space-between; color:#e67e22; font-weight:700; font-size:0.9rem;">
+                    <span>✨ Secret Charm Freebie:</span>
+                    <span>ADDED</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; color:#e74c3c; font-size:0.9rem; margin-top:5px;">
+                    <span>5+ Item Discount:</span>
+                    <span>-₹50</span>
+                </div>
+            </div>`;
+        bodyText += `%0A%0A🎁 FREEBIE EARNED: Secret Mini Charm (Eye-pin)%0A🎁 DISCOUNT APPLIED: -₹50`;
     }
 
     document.getElementById('cart-count').innerText = count;
@@ -514,12 +576,12 @@ function updateCart() {
     } else {
         footer.innerHTML = `
         <div style="margin-bottom:15px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px; opacity:0.7;">
                 <span>Subtotal:</span>
                 <span>₹${sub}</span>
             </div>
             ${discountRow}
-            <div style="display:flex; justify-content:space-between; border-top:1px solid #ddd; padding-top:10px; font-weight:bold; font-size:1.1rem;">
+            <div style="display:flex; justify-content:space-between; border-top:2px solid var(--bg); padding-top:10px; font-weight:bold; font-size:1.2rem; color: var(--forest);">
                 <span>Total:</span>
                 <span>₹${finalTotal}</span>
             </div>
